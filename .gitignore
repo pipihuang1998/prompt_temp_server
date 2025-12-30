@@ -5,3 +5,5 @@ backend/app/__pycache__/
 *.pyc
 .env
 dist/
+frontend/dist/
+frontend/.vite/
