@@ -1,0 +1,5 @@
+Flask
+Flask-SQLAlchemy
+Flask-Cors
+requests
+jinja2
