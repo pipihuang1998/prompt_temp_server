@@ -55,15 +55,29 @@
                  <input type="checkbox" v-model="param.extension[field.key]" /> {{ field.label }}
               </div>
 
-              <!-- List String (Simple comma separated for now) -->
+              <!-- List String (Tag input style) -->
               <div v-else-if="field.type === 'list_string'">
-                <input
-                  :value="param.extension[field.key] ? param.extension[field.key].join(',') : ''"
-                  @input="e => param.extension[field.key] = e.target.value.split(',')"
-                  placeholder="Comma separated values"
-                  style="width: 90%;"
-                />
+                <div style="display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 5px; border: 1px solid #ccc; padding: 5px; border-radius: 3px;">
+                  <span v-for="(tag, tagIdx) in (param.extension[field.key] || [])" :key="tagIdx" style="background: #e0e0e0; padding: 2px 5px; border-radius: 3px; font-size: 0.9em;">
+                    {{ tag }} <span @click="param.extension[field.key].splice(tagIdx, 1)" style="cursor: pointer; color: red; margin-left: 3px;">&times;</span>
+                  </span>
+                  <input
+                    @keydown.enter.prevent="e => { if(e.target.value) { if(!param.extension[field.key]) param.extension[field.key] = []; param.extension[field.key].push(e.target.value); e.target.value = ''; } }"
+                    placeholder="Enter to add"
+                    style="border: none; outline: none; flex: 1; min-width: 50px;"
+                  />
+                </div>
+                <div style="font-size: 0.8em; color: gray;">Press Enter to add items</div>
               </div>
+
+              <!-- Select -->
+              <div v-else-if="field.type === 'select'">
+                <select v-model="param.extension[field.key]" style="width: 90%;">
+                  <option v-for="opt in field.options" :key="opt" :value="opt">{{ opt }}</option>
+                </select>
+              </div>
+
+              <div v-if="field.tips" style="font-size: 0.8em; color: gray; margin-bottom: 5px;">{{ field.tips }}</div>
             </div>
           </div>
         </div>
